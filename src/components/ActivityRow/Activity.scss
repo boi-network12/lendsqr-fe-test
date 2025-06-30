@@ -1,0 +1,74 @@
+.ActivityWrapper{
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2%;
+    width: 100%;
+    flex-wrap: wrap;
+
+    >.box{
+        background: #fff;
+        width: 240px;
+        padding: 2% 4%;
+        margin-bottom: 10px;
+        border: 1px solid rgba(33, 63, 125, 0.06);
+        border-radius: 4px;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+
+        >.iconBg{
+            width: 40px;
+            height: 40px;
+            background: rgba(223, 24, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            >.icon{
+                color: rgba(223, 24, 255, 1);
+                font-size: 22px;
+            }
+        }
+
+        >span{
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 100%;
+            letter-spacing: 0;
+            text-transform: uppercase;
+            color: #545F7D;
+        }
+
+        >h3{
+            color: #213f7d;
+            font-weight: 600;
+            font-size: 24px;
+            letter-spacing: 0;
+            line-height: 100%;
+            text-transform: uppercase;
+        }
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .ActivityWrapper {
+        align-items: center;
+        justify-content: center;
+
+        >.box{
+            width: 40%;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .ActivityWrapper {
+        align-items: center;
+        justify-content: center;
+
+        >.box{
+            width: 90%;
+        }
+    }
+}
