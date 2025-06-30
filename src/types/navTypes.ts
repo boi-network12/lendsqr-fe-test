@@ -7,3 +7,16 @@ export interface NavItem {
   path?: string;
   subItems?: NavItem[];
 }
+
+export interface NavbarProps {
+  toggleSidebar: () => void;
+}
+
+export interface SidebarProps {
+  isOpen: boolean;
+  toggleSidebar: () => void;
+}
+
+export interface DashboardProps {
+  // Add props if needed
+}

@@ -1,108 +1,221 @@
-.NavbarWrapper{
-    height: 100px;
+.NavbarWrapper {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #213f7d;
+    cursor: pointer;
+  }
+
+  .first-Div {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 25px;
-    background: #fff;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-     
-    >.first-Div{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 150px;
+    gap: 20px;
 
-        >.searchForm {
-            display: flex;
-            align-items: center;
-            justify-content: start;
-            width: 400px;
-            border-radius: 8px;
-            height: 30px;
-            border: 1px solid rgba(33, 63, 125, 0.2);
-            background: rgba(255, 255, 255, 1);
-            overflow: hidden;
+    .searchForm {
+      display: flex;
+      align-items: center;
+      width: 400px;
+      border-radius: 8px;
+      height: 40px;
+      border: 1px solid rgba(33, 63, 125, 0.2);
+      background: #fff;
+      overflow: hidden;
+      transition: all 0.3s ease;
 
-            .searchIcon{
-                height: 100%;
-                background: #39CDCC;
-                width: 56px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-            }
+      &.search-open {
+        width: 200px; /* Expanded width when search is open */
+        border-radius: 8px;
+        background: #fff;
+      }
 
-            input{
-                all: unset;
-                width: 100%;
-                height: 100%;
-                padding: 0 20px;
-                color: rgba(84, 95, 125, 1);
-                font-size: 14px;
-
-                &::placeholder{
-                    opacity: 20%;
-                    font-weight: 400;
-                    line-height: 100%;
-                    letter-spacing: 0;
-                    font-size: 14px;
-                    color: rgba(84, 95, 125, 1);
-                }
-            }
-        }
-
-         >.login-img{
-            width: 144.8px;
-            height: 30px;
-        }
-    }
-
-    .second-Div{
-        list-style: none;
+      .searchIcon {
+        height: 100%;
+        background: #39cdcc;
+        width: 56px;
         display: flex;
         align-items: center;
-        justify-content: end;
-        gap: 20px;
+        justify-content: center;
+        cursor: pointer;
+        border: none;
+      }
 
-        li{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-weight: 400;
-            line-height: 100%;
-            letter-spacing: 0;
-            font-size: 16px;
-            color: #213F7D;
+      input {
+        all: unset;
+        width: 100%;
+        padding: 0 15px;
+        color: #545f7d;
+        font-size: 14px;
 
-            >.bell-icon{
-                width: 26px;
-                height: 26px;
-                color: #213F7D;
-            }
-
-            >a{
-                text-decoration: underline;
-                color: #213F7D;
-                font-weight: 400;
-                font-size: 16px;
-                line-height: 100%;
-                letter-spacing: 0;
-            }
-
-            >img{
-                height: 48px;
-                width: 48px;
-                border-radius: 50%;
-                margin-right: 10px;
-            }
-
-            >p{
-                margin-right: 5px;
-            }
+        &::placeholder {
+          color: #545f7d;
+          opacity: 0.6;
+          font-weight: 400;
         }
+
+        &.search-input-open {
+          display: block; /* Ensure input is visible when open */
+        }
+      }
     }
+
+    .login-img {
+      width: 144.8px;
+      height: 30px;
+    }
+  }
+
+  .second-Div {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    li {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: #213f7d;
+
+      &.user-profile {
+        gap: 8px;
+      }
+
+      .bell-icon {
+        width: 26px;
+        height: 26px;
+        color: #213f7d;
+      }
+
+      a {
+        text-decoration: none;
+        color: #213f7d;
+        font-weight: 400;
+        font-size: 16px;
+      }
+
+      img {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+
+      p {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+// Tablet
+@media (min-width: 769px) and (max-width: 1024px) {
+  .NavbarWrapper {
+    .first-Div {
+      .searchForm {
+        width: 240px;
+        height: 35px;
+      }
+
+      .login-img{
+        width: 120px;
+        object-fit: contain;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .NavbarWrapper {
+    padding: 0 15px;
+
+    .hamburger {
+      display: block;
+      font-size: 16px;
+    }
+
+    .first-Div {
+      gap: 10px;
+      width: 100%;
+
+      .searchForm {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: none;
+        background: #333;
+        
+
+        &.search-open {
+          width: 100%; /* Expand to full width for input */
+          height: 30px;
+          border: 1px solid rgba(33, 63, 125, 0.2);
+          border-radius: 8px;
+          background: #fff;
+        }
+
+        input {
+          display: none; /* Hidden by default */
+          &.search-input-open {
+            display: block; /* Show input when open */
+            padding: 0 10px;
+          }
+        }
+
+        .searchIcon {
+          background: #39cdcc;
+          width: 30px;
+          height: 30px;
+
+          &.search-open {
+            background: #39cdcc;
+            width: 40px;
+            border-radius: 0 8px 8px 0;
+          }
+        }
+        
+      }
+
+      .login-img {
+        width: 90px;
+        object-fit: contain;
+      }
+    }
+
+    .second-Div {
+      display: flex; /* Default for mobile */
+      &.search-open {
+        display: block; /* Change to block when search is open */
+        margin-top: 10px; /* Add spacing to stack below search */
+      }
+
+      li {
+        img {
+          height: 30px;
+          width: 30px;
+        }
+
+        .bell-icon {
+          width: 20px;
+        }
+
+        p {
+          display: none; /* Hide text in mobile by default */
+        }
+      }
+    }
+  }
 }

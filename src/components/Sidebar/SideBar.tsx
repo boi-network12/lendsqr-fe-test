@@ -1,22 +1,31 @@
 import React from 'react'
 import './Sidebar.scss'
-import { BiBriefcase, BiChevronDown, BiHome } from 'react-icons/bi'
+import { BiBriefcase, BiChevronDown } from 'react-icons/bi'
 import { navItems } from '../../constants/navItems'
+import { SidebarProps } from '../../types/navTypes';
 
-const SideBar = () => {
+interface ExtendedSidebarProps extends SidebarProps {
+  isOpen: boolean;
+  toggleSidebar: () => void;
+}
+
+const SideBar: React.FC<ExtendedSidebarProps> = ({ isOpen, toggleSidebar }) => {
   
   return (
-    <div className='sidebarWrapper'>
+    <div className={`sidebarWrapper ${isOpen ? 'sidebar-open' : ''}`}>
       
-      <h3 className='switchType'>{BiBriefcase({})} switch organization {BiChevronDown({})}</h3>
+      <h3 className='switchType'>
+         {BiBriefcase({})} switch organization {BiChevronDown({})}
+      </h3>
 
-      <h4 className='dashboardText'>{BiHome({})} dashboard</h4>
-      
+
       {navItems.main.map((item, index) => {
         const Icon = item.icon;
         return (
           <h4 key={index} className='dashboardText'>
-            {Icon({})}
+            <p className={!isOpen ? 'iconOnly' : ''}>
+                  {Icon({})}
+              </p>
             <span>{item.label}</span>
           </h4>
         );
@@ -32,8 +41,14 @@ const SideBar = () => {
               {items.map((item, index) => {
                 const Icon = item.icon;
                 return (
-                  <li key={index} className={item.label === 'Users' ? 'active' : ''}>
-                    {Icon({})}
+                  <li 
+                    key={index} 
+                    className={item.label === 'Users' ? 'active' : ''}
+                    onClick={() => window.innerWidth <= 768 && toggleSidebar()}
+                  >
+                    <p className={!isOpen ? 'iconOnly' : ''}>
+                       {Icon({})}
+                    </p>
                     <span>{item.label}</span>
                   </li>
                 );
