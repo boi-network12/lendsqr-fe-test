@@ -1,8 +1,21 @@
-.route-with-sidebar{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-    background: #F5F6FA;
-    height: 100lvh;
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100lvh; 
+}
+
+.route-with-sidebar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  background: #f5f6fa;
+  height: calc(100vh - 60px); 
+}
+
+* {
+  // Hide scrollbar in WebKit browsers (Chrome, Safari, Edge)
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
