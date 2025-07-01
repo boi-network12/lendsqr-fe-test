@@ -29,14 +29,22 @@
           font-size: 12px;
           line-height: 100%;
           letter-spacing: 0;
+          text-transform: uppercase;
 
-          span {
-            cursor: pointer;
-            color: #9ca3af;
-            transition: color 0.2s ease;
+          .header-content {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
 
-            &:hover {
-              color: #2563eb;
+            svg {
+              color: #9ca3af;
+              transition: color 0.2s ease;
+              flex-shrink: 0;
+
+              &:hover {
+                color: #2563eb;
+              }
             }
           }
         }
@@ -100,6 +108,19 @@
                 color: #ef4444;
               }
             }
+
+            .mobileCard {
+              display: none; // Hidden by default, shown on mobile
+            }
+
+            .desktopRow {
+              display: flex;
+              align-items: center;
+              flex-direction: row;
+              justify-content: space-between;
+
+              
+            }
           }
         }
       }
@@ -141,7 +162,8 @@
         cursor: pointer;
         transition: background 0.2s ease;
 
-        &:hover, &:focus {
+        &:hover,
+        &:focus {
           background: linear-gradient(45deg, rgba(33, 63, 125, 0.2), rgba(33, 63, 125, 0.3));
         }
       }
@@ -215,7 +237,7 @@
         tbody {
           tr td {
             padding: 12px;
-            font-size: 13px;
+            font-size: 12px;
 
             .status {
               padding: 5px 10px;
@@ -270,64 +292,100 @@
     .dataContainer {
       padding: 12px;
       border-radius: 8px;
-      overflow-x: hidden;
 
       .dataTable {
-        display: block;
-
         thead {
-          display: none; /* Hide table header on mobile */
+          display: none; // Hide table header on mobile
         }
 
         tbody {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-
           tr {
-            display: flex;
-            flex-direction: column;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(33, 63, 125, 0.1 );
-            padding: 12px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-            &:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 4px 12px rgba(33, 63, 125, 0.15);
-              background-color: #f9fafb;
-            }
+            border-bottom: none;
+            display: block;
+            margin-bottom: 12px;
 
             td {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              padding: 8px 0;
-              font-size: 13px;
-              border-bottom: 1px solid #f1f5f9;
+              padding: 0;
+              display: block;
 
-              &:last-child {
-                border-bottom: none;
+              .desktopRow {
+                display: none; // Hide desktop table cells
               }
 
-              /* Add labels for mobile */
-              &::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: #213f7d;
-                text-transform: capitalize;
-                flex: 1;
-              }
+              .mobileCard {
+                display: block;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(33, 63, 125, 0.1);
+                overflow: hidden;
+                transition: all 0.3s ease;
 
-              .status {
-                padding: 5px 10px;
-                font-size: 11px;
-                flex: none;
-              }
+                .mobileCardHeader {
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  padding: 12px;
+                  cursor: pointer;
+                  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 
-              .tableIcon {
-                font-size: 16px;
+                  .mobileCardMain {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+
+                    .mobileCardTitle {
+                      font-size: 14px;
+                      font-weight: 600;
+                      color: #213f7d;
+                    }
+
+                    .status {
+                      padding: 4px 8px;
+                      font-size: 12px;
+                      border-radius: 10px;
+                    }
+                  }
+
+                  .toggleIcon {
+                    font-size: 20px;
+                    color: #545f7d;
+                    transition: transform 0.3s ease;
+                  }
+                }
+
+                .mobileCardContent {
+                  max-height: 0;
+                  overflow: hidden;
+                  transition: max-height 0.3s ease, padding 0.3s ease;
+
+                  &.expanded {
+                    max-height: 300px; // Adjust based on content
+                    padding: 12px;
+                  }
+
+                  .mobileCardDetails {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+
+                    .detailItem {
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      font-size: 12px;
+                      color: #545f7d;
+
+                      .detailLabel {
+                        font-weight: 500;
+                        color: #213f7d;
+                      }
+
+                      .tableIcon {
+                        font-size: 16px;
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -341,15 +399,15 @@
       padding: 12px 0;
 
       .dropdownDiv {
-        justify-content: center;
+        gap: 8px;
 
-        select {
-          width: 60px;
-          height: 28px;
+        p {
           font-size: 12px;
         }
 
-        p {
+        select {
+          width: 60px;
+          height: 26px;
           font-size: 12px;
         }
       }
@@ -358,17 +416,17 @@
         gap: 6px;
 
         button {
-          width: 36px;
-          height: 36px;
+          width: 28px;
+          height: 28px;
 
           svg {
-            font-size: 20px;
+            font-size: 16px;
           }
         }
 
         p {
           font-size: 14px;
-          padding: 4px 8px;
+          padding: 3px 6px;
         }
       }
     }

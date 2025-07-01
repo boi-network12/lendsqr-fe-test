@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import './DashboardData.scss';
-import { BiChevronLeft, BiChevronRight, BiDotsVertical } from 'react-icons/bi';
+import { BiChevronDown, BiChevronLeft, BiChevronRight, BiChevronUp, BiDotsVertical, BiFilter } from 'react-icons/bi';
 import { dashboardData } from '../../constants/dashboardData';
 import { DashboardDataItem } from '../../types/dashboardTypes';
 
 const DashboardData: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [expandedRows, setExpandedRows] = useState<number[]>([]);
 
   // Calculate total pages
   const totalPages = Math.ceil(dashboardData.length / itemsPerPage);
@@ -17,6 +18,14 @@ const DashboardData: React.FC = () => {
     currentPage * itemsPerPage
   );
 
+  // Toggle collapse/expand for a row
+  const toggleRow = (index: number) => {
+    setExpandedRows((prev) =>
+      prev.includes(index)
+        ? prev.filter((i) => i !== index)
+        : [...prev, index]
+    );
+  };
 
    // Generate page numbers dynamically
   const getPageNumbers = () => {
@@ -70,13 +79,15 @@ const DashboardData: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    setExpandedRows([])
   };
 
   const handleItemsPerPageChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setItemsPerPage(Number(event.target.value));
-    setCurrentPage(1); // Reset to first page when items per page changes
+    setCurrentPage(1);
+    setExpandedRows([])
   };
 
 
@@ -87,44 +98,115 @@ const DashboardData: React.FC = () => {
           <thead>
             <tr>
               <th>
-                ORGANIZATION <span>▼</span>
+                <span className="header-content">
+                  ORGANIZATION
+                  {BiFilter({ size: 20 })}
+                </span>
               </th>
               <th>
-                USERNAME <span>▼</span>
+                <span className="header-content">
+                  USERNAME
+                  {BiFilter({ size: 20 })}
+                </span>
               </th>
               <th>
-                EMAIL <span>▼</span>
+                <span className="header-content">
+                  EMAIL
+                  {BiFilter({ size: 20 })}
+                </span>
               </th>
               <th>
-                PHONE NUMBER <span>▼</span>
+                <span className="header-content">
+                  PHONE NUMBER
+                  {BiFilter({ size: 20 })}
+                </span>
               </th>
               <th>
-                DATE JOINED <span>▼</span>
+                <span className="header-content">
+                  DATE JOINED
+                  {BiFilter({ size: 20 })}
+                </span>
               </th>
               <th>
-                STATUS <span>▼</span>
+                <span className="header-content">
+                  STATUS
+                  {BiFilter({ size: 20 })}
+                </span>
               </th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((item: DashboardDataItem, index: number) => (
-              <tr key={index}>
-                <td>{item.organization}</td>
-                <td>{item.username}</td>
-                <td>{item.email}</td>
-                <td>{item.phoneNumber}</td>
-                <td>{item.dateJoined}</td>
-                <td>
-                  <span className={`status ${item.status.toLowerCase()}`}>
-                    {item.status}
-                  </span>
-                </td>
-                <td>
-                  {BiDotsVertical({ className: "tableIcon" })}
-                </td>
-              </tr>
-            ))}
+            {paginatedData.map((item: DashboardDataItem, index: number) => {
+              const globalIndex = (currentPage - 1) * itemsPerPage + index;
+              const isExpanded = expandedRows.includes(globalIndex);
+
+              return (
+                <tr key={globalIndex} className="dataRow">
+                  <td colSpan={7} className="mobileCell">
+                    <div className="mobileCard">
+                      <div
+                        className="mobileCardHeader"
+                        onClick={() => toggleRow(globalIndex)}
+                      >
+                        <div className="mobileCardMain">
+                          <span className="mobileCardTitle">{item.organization}</span>
+                          <span className={`status ${item.status.toLowerCase()}`}>
+                            {item.status}
+                          </span>
+                        </div>
+                        {isExpanded ? (
+                          BiChevronUp({ className: "toggleIcon" })
+                        ) : (
+                          BiChevronDown({ className: "toggleIcon" })
+                        )}
+                      </div>
+                      <div
+                        className={`mobileCardContent ${isExpanded ? 'expanded' : ''}`}
+                      >
+                        <div className="mobileCardDetails">
+                          <div className="detailItem">
+                            <span className="detailLabel">Username:</span>
+                            <span>{item.username}</span>
+                          </div>
+                          <div className="detailItem">
+                            <span className="detailLabel">Email:</span>
+                            <span>{item.email}</span>
+                          </div>
+                          <div className="detailItem">
+                            <span className="detailLabel">Phone:</span>
+                            <span>{item.phoneNumber}</span>
+                          </div>
+                          <div className="detailItem">
+                            <span className="detailLabel">Date Joined:</span>
+                            <span>{item.dateJoined}</span>
+                          </div>
+                          <div className="detailItem">
+                            {BiDotsVertical({ className: "tableIcon" })}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Desktop/Tablet table cells */}
+                    <div className="desktopRow">
+                      <div>{item.organization}</div>
+                      <div>{item.username}</div>
+                      <div>{item.email}</div>
+                      <div>{item.phoneNumber}</div>
+                      <div>{item.dateJoined}</div>
+                      <div>
+                        <span className={`status ${item.status.toLowerCase()}`}>
+                          {item.status}
+                        </span>
+                      </div>
+                      <div>
+                        {BiDotsVertical({ className: "tableIcon" })}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>
