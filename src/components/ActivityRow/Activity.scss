@@ -1,74 +1,94 @@
 .ActivityWrapper{
-    margin-top: 40px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: flex-start;
-    gap: 2%;
     width: 100%;
-    flex-wrap: wrap;
+    margin-bottom: 30px;
 
-    >.box{
-        background: #fff;
-        width: 240px;
-        padding: 2% 4%;
-        margin-bottom: 10px;
-        border: 1px solid rgba(33, 63, 125, 0.06);
-        border-radius: 4px;
-        box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+    >.Subtitle{
+        color: #213f7d;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 100%;
+        letter-spacing: 0;
+    }
 
-        >.iconBg{
-            width: 40px;
-            height: 40px;
-            background: rgba(223, 24, 255, 0.1);
-            border-radius: 50%;
+    >.BoxContainer{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+
+        >.box{
+            width: 240px;
+            height: 160px;
+            background: #fff;
+            box-shadow: 0 0 3px rgba(33, 63, 125, 0.08);
+            border-radius: 4px;
+            padding: 20px;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 5px;
 
-            >.icon{
-                color: rgba(223, 24, 255, 1);
-                font-size: 22px;
+            >.iconBg{
+                border-radius: 50%;
+                height: 40px;
+                width: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
-        }
 
-        >span{
-            font-weight: 500;
-            font-size: 14px;
-            line-height: 100%;
-            letter-spacing: 0;
-            text-transform: uppercase;
-            color: #545F7D;
-        }
-
-        >h3{
-            color: #213f7d;
-            font-weight: 600;
-            font-size: 24px;
-            letter-spacing: 0;
-            line-height: 100%;
-            text-transform: uppercase;
+            >span{
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 100%;
+                letter-spacing: 0;
+                text-transform: uppercase;
+                color: #545f7d;
+            }
+            
+            >h3{
+                color: #213f7d;
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 100%;
+                letter-spacing: 0;
+                text-transform: uppercase;
+                margin-bottom: 0;
+            }
         }
     }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-    .ActivityWrapper {
-        align-items: center;
-        justify-content: center;
+    .ActivityWrapper{
 
-        >.box{
-            width: 40%;
+        .BoxContainer{
+            gap: 15px;
+
+            .box{
+
+                &:last-child{
+                    width: 100%;
+                }
+            }
         }
     }
 }
 
 @media (max-width: 768px) {
-    .ActivityWrapper {
-        align-items: center;
-        justify-content: center;
+    .ActivityWrapper{
+        width: 100%;
 
-        >.box{
-            width: 90%;
+        .BoxContainer{
+            gap: 15px;
+
+            .box{
+                width: 230px;
+            }
         }
     }
 }

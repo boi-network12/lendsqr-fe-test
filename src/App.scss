@@ -31,7 +31,11 @@
 @media (min-width: 769px) and (max-width: 1024px) {
   .route-with-sidebar {
     .sidebarWrapper {
-      width: 60px; // Compact sidebar with icons only
+      width: 70px; 
+      position: fixed;
+      left: 0;
+      top: 60px;
+      z-index: 1000;
       .switchType,
       .dashboardText span,
       .sectionDiv h6,
@@ -43,7 +47,7 @@
         justify-content: flex-start;
       }
       &:hover {
-        width: 350px; // Expand on hover
+        width: 283px; // Expand on hover
         .switchType,
         .dashboardText span,
         .sectionDiv h6,

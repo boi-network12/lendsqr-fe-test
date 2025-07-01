@@ -1,7 +1,7 @@
-import { IconType } from 'react-icons';
+
 
 export interface ActivityItem {
-    icon: IconType;
+    icon: string;
     title: string;
     number: number;
     iconColor: string; // Color for the icon
