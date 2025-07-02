@@ -1,17 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './UsersData.scss';
-import { BiChevronDown, BiChevronLeft, BiChevronRight, BiChevronUp, BiDotsVertical, BiFilter } from 'react-icons/bi';
+import { BiChevronDown, BiChevronLeft, BiChevronRight, BiChevronUp, BiDotsVertical, BiFilter, BiFilterAlt, BiUser, BiUserMinus } from 'react-icons/bi';
 import { UserDataItem } from '../../types/userTypes';
+import { FaRegEye } from 'react-icons/fa';
+import FilterForm from '../../modal/FilterForm/FilterForm';
+import debounce from '../../utils/debounce';
 
 const UsersData: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
   const [users, setUsers] = useState<UserDataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false); 
+  const [filters, setFilters] = useState<Partial<UserDataItem>>({}); 
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  
+
 
   const fetchUsers = async () => {
     try {
@@ -51,8 +59,39 @@ const UsersData: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const totalPages = Math.ceil(users.length / itemsPerPage);
-  const paginatedData = users.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Debounced search handler
+  const handleSearch = debounce((value: string) => {
+    setFilters((prev) => ({ ...prev, organization: value }));
+    setCurrentPage(1); // Reset to first page
+    setExpandedRows([]);
+    setDropdownOpen(null);
+  }, 500);
+
+  // Handle input change for search
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    handleSearch(value);
+  };
+
+  const filteredUsers = users.filter((user) => 
+    Object.entries(filters).every(([key, value]) => {
+      if (!value) return true;
+      const userValue = user[key as keyof UserDataItem]?.toString().toLowerCase();
+      if (key === 'dateJoined') {
+        return userValue === value;
+      }
+      return userValue?.includes(value.toLowerCase())
+    })
+  )
+
+
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const paginatedData = filteredUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
 
   const toggleRow = (index: number) => {
     setExpandedRows((prev) =>
@@ -61,11 +100,26 @@ const UsersData: React.FC = () => {
   };
 
   const toggleDropdown = (index: number) => {
-  setDropdownOpen((prev) => {
-    const newValue = prev === index ? null : index;
-    return newValue;
-  });
-};
+    setDropdownOpen((prev) => {
+      const newValue = prev === index ? null : index;
+      return newValue;
+    });
+  };
+
+  // Handle filter icon click
+  const handleFilterClick = () => {
+    setIsFilterModalOpen(true);
+  };
+
+  // Handle filter application
+  const handleApplyFilters = (newFilters: Partial<UserDataItem>) => {
+    setFilters(newFilters);
+    setCurrentPage(1); 
+    setExpandedRows([]);
+    setDropdownOpen(null);
+  };
+
+
 
   const getPageNumbers = () => {
     const maxPagesToShow = 5;
@@ -148,14 +202,16 @@ const UsersData: React.FC = () => {
       </p>
       {dropdownOpen === globalIndex ? (
         <div className="dropdownMenu open">
-          <div className="dropdownItem" onClick={() => handleDropdownAction('View', item)}>
-            View
-          </div>
-          <div className="dropdownItem" onClick={() => handleDropdownAction('Edit', item)}>
-            Edit
-          </div>
-          <div className="dropdownItem" onClick={() => handleDropdownAction('Delete', item)}>
-            Delete
+          <div className='dropdownMenuContainer'>
+            <div className="dropdownItem" onClick={() => handleDropdownAction('View', item)}>
+               {FaRegEye({})} View Details
+            </div>
+            <div className="dropdownItem" onClick={() => handleDropdownAction('Blacklist', item)}>
+              {BiUserMinus({})} Blacklist User
+            </div>
+            <div className="dropdownItem" onClick={() => handleDropdownAction('Activate', item)}>
+               {BiUser({})} Activate User
+            </div>
           </div>
         </div>
       ) : null}
@@ -173,13 +229,31 @@ const UsersData: React.FC = () => {
                 <th key={idx}>
                   <span className="header-content">
                     {header}
-                    {header && BiFilter({ size: 20 })}
+                    {header && BiFilter({ size: 20, onClick: (e) => {
+                      e.preventDefault();
+                      handleFilterClick();
+                    } })}
                   </span>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
+            <div className='mobileHeaderDiv'>
+              <form action="" onSubmit={(e) => e.preventDefault()}>
+                <input 
+                  type="text" 
+                  placeholder='search organization'
+                  value={searchTerm}
+                  onChange={handleSearchInputChange}
+                  aria-label="Search by organization"
+                />
+              </form>
+              {BiFilterAlt({ className: "mobileFilterIcon", onClick: (e) => {
+                e.preventDefault();
+                handleFilterClick();
+              } })}
+            </div>
             {paginatedData.map((item, index) => {
               const globalIndex = (currentPage - 1) * itemsPerPage + index;
               const isExpanded = expandedRows.includes(globalIndex);
@@ -216,6 +290,7 @@ const UsersData: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                    {/* desktop function */}
                     <div className="desktopRow">
                       <div>{item.organization}</div>
                       <div>{item.username}</div>
@@ -234,6 +309,15 @@ const UsersData: React.FC = () => {
           </tbody>
         </table>
       </div>
+      {/* Add filter form */}
+      <FilterForm
+         isOpen={isFilterModalOpen}
+         onClose={() => setIsFilterModalOpen(false)}
+         onFilter={handleApplyFilters}
+         users={users}
+         currentFilters={filters}
+      />
+      {/* filter form end */}
       <div className="dataController">
         <div className="dropdownDiv">
           <p>Showing:</p>
@@ -244,13 +328,13 @@ const UsersData: React.FC = () => {
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
           >
-            {[5, 10, 20, 50, 100].map((value) => (
+            {[9, 18, 36, 50, 100].map((value) => (
               <option key={value} value={value}>
                 {value}
               </option>
             ))}
           </select>
-          <p>out of {users.length}</p>
+          <p>out of {filteredUsers.length}</p>
         </div>
         <div className="numberDisplay">
           <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>

@@ -15,6 +15,6 @@ code {
 
 *{
   padding: 0;
-  bottom: 0;
+  /* the mistake have been done so gasto be going */
   box-sizing: border-box;
 }
