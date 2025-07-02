@@ -20,10 +20,15 @@ const FilterForm: React.FC<FilterFormProps> = ({ isOpen, onClose, onFilter, user
     // Handle click outside to close modal
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-        if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-            onClose(); // Close the modal
-            setIsDatePickerOpen(false); // Close date picker if open
-        }
+            if (
+                    modalRef.current &&
+                    !modalRef.current.contains(event.target as Node) &&
+                    
+                    !document.querySelector('.ant-picker-dropdown')?.contains(event.target as Node)
+                ) {
+                    onClose(); 
+                    setIsDatePickerOpen(false);
+            }
         };
 
         document.addEventListener('mousedown', handleClickOutside);
