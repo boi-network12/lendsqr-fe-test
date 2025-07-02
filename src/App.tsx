@@ -49,7 +49,7 @@ function App() {
         />
 
         <Route
-          path="/user-details"
+          path="/user-details/:id"
           element={
             <div className="dashboard-layout">
               <Navbar toggleSidebar={toggleSidebar} />

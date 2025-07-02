@@ -6,7 +6,7 @@ import { DashboardDataItem } from '../../types/dashboardTypes';
 
 const DashboardData: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
 
   // Calculate total pages
@@ -133,7 +133,11 @@ const DashboardData: React.FC = () => {
                   {BiFilter({ size: 20 })}
                 </span>
               </th>
-              <th></th>
+              <th>
+                <span className="header-content">
+                  
+                </span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -191,7 +195,7 @@ const DashboardData: React.FC = () => {
                     <div className="desktopRow">
                       <div>{item.organization}</div>
                       <div>{item.username}</div>
-                      <div>{item.email}</div>
+                      <div className='email'>{item.email}</div>
                       <div>{item.phoneNumber}</div>
                       <div>{item.dateJoined}</div>
                       <div>
@@ -199,7 +203,7 @@ const DashboardData: React.FC = () => {
                           {item.status}
                         </span>
                       </div>
-                      <div>
+                      <div className='dotIcon'>
                         {BiDotsVertical({ className: "tableIcon" })}
                       </div>
                     </div>
@@ -220,9 +224,9 @@ const DashboardData: React.FC = () => {
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
           >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
+            <option value="9">9</option>
+            <option value="18">18</option>
+            <option value="36">36</option>
             <option value="50">50</option>
             <option value="100">100</option>
           </select>

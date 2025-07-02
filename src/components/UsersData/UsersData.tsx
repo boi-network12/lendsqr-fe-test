@@ -5,44 +5,29 @@ import { UserDataItem } from '../../types/userTypes';
 import { FaRegEye } from 'react-icons/fa';
 import FilterForm from '../../modal/FilterForm/FilterForm';
 import debounce from '../../utils/debounce';
+import { useNavigate } from 'react-router-dom';
+import { useUserData } from '../../hooks/useUserData';
+import { ClipLoader } from 'react-spinners';
 
 const UsersData: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(9);
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
-  const [users, setUsers] = useState<UserDataItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false); 
   const [filters, setFilters] = useState<Partial<UserDataItem>>({}); 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const navigate = useNavigate();
+
+
+  // Use the custom hook to access context
+  const { users, loading, error, fetchUsers } = useUserData();
   
-
-
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await fetch('https://api.json-generator.com/templates/20l9OjP20icY/data', {
-        headers: {
-          Authorization: 'Bearer c8ssaqsn1pjis94vg5svuzv6hs9axm5mmkej6hsz',
-        },
-      });
-      if (!response.ok) throw new Error('Failed to fetch user data');
-      const data: UserDataItem[] = await response.json();
-      setUsers(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchUsers();
-  }, []);
+  },[fetchUsers])
+
 
   // Handle click outside for dropdowns
   useEffect(() => {
@@ -77,11 +62,14 @@ const UsersData: React.FC = () => {
   const filteredUsers = users.filter((user) => 
     Object.entries(filters).every(([key, value]) => {
       if (!value) return true;
-      const userValue = user[key as keyof UserDataItem]?.toString().toLowerCase();
-      if (key === 'dateJoined') {
-        return userValue === value;
+      const userValue = user[key as keyof UserDataItem]
+      
+      if (typeof userValue === 'string' && typeof value === 'string') {
+        return userValue.toLowerCase().includes(value.toLowerCase());
       }
-      return userValue?.includes(value.toLowerCase())
+
+      // If userValue is an object, skip or handle nested properties (optional)
+      return false; 
     })
   )
 
@@ -179,12 +167,27 @@ const UsersData: React.FC = () => {
     setDropdownOpen(null);
   };
 
+  // handleNavigation
+  const handleRowClick = (user: UserDataItem) => {
+    navigate(`/user-details/${user.id}`, { state: { user }})
+  }
+
   const handleDropdownAction = (action: string, user: UserDataItem) => {
     console.log(`${action} clicked for user: ${user.username}`);
     setDropdownOpen(null);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return (
+    <div className="loadingContainer">
+      <ClipLoader
+        color="#333"
+        loading={loading}
+        size={30}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
+    </div>
+  );
   if (error) return <div>Error: {error}</div>;
 
   const renderDropdown = (item: UserDataItem, globalIndex: number) => {
@@ -259,12 +262,18 @@ const UsersData: React.FC = () => {
               const isExpanded = expandedRows.includes(globalIndex);
 
               return (
-                <tr key={item.id} className="dataRow">
+                <tr 
+                   key={item.id} className="dataRow"
+                >
                   <td colSpan={7} className="mobileCell">
                     <div className="mobileCard">
                       <div className="mobileCardHeader" onClick={() => toggleRow(globalIndex)}>
                         <div className="mobileCardMain">
-                          <span className="mobileCardTitle">{item.organization}</span>
+                          <span className="mobileCardTitle hoverLink"
+                           onClick={() => handleRowClick(item)}
+                          >
+                            {item.username}
+                          </span>
                           <span className={`status ${item.status.toLowerCase()}`}>{item.status}</span>
                         </div>
                         {isExpanded ? BiChevronUp({ className: "toggleIcon" }) : BiChevronDown({ className: "toggleIcon" })}
@@ -272,7 +281,7 @@ const UsersData: React.FC = () => {
                       <div className={`mobileCardContent ${isExpanded ? 'expanded' : ''}`}>
                         <div className="mobileCardDetails">
                           {[
-                            { label: 'Username', value: item.username },
+                            { label: 'Organization', value: item.organization },
                             { label: 'Email', value: item.email },
                             { label: 'Phone', value: item.phoneNumber },
                             { label: 'Date Joined', value: item.dateJoined },
@@ -293,11 +302,13 @@ const UsersData: React.FC = () => {
                     {/* desktop function */}
                     <div className="desktopRow">
                       <div>{item.organization}</div>
-                      <div>{item.username}</div>
-                      <div>{item.email}</div>
+                      <div className="hoverLink" onClick={() => handleRowClick(item)}>
+                        {item.username}
+                      </div>
+                      <div className='email'>{item.email}</div>
                       <div>{item.phoneNumber}</div>
                       <div>{item.dateJoined}</div>
-                      <div>
+                      <div className='dotIcon'>
                         <span className={`status ${item.status.toLowerCase()}`}>{item.status}</span>
                       </div>
                       {renderDropdown(item, globalIndex)}
@@ -328,7 +339,7 @@ const UsersData: React.FC = () => {
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
           >
-            {[9, 18, 36, 50, 100].map((value) => (
+            {[9, 18, 36, 50, 100, 200, 300, 400, 500].map((value) => (
               <option key={value} value={value}>
                 {value}
               </option>
