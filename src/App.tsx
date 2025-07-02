@@ -6,6 +6,7 @@ import SideBar from './components/Sidebar/SideBar';
 import Navbar from './components/Navbar/Navbar';
 import { useState } from 'react';
 import Users from './pages/Users/Users';
+import UserDetails from './pages/UserDetails/UserDetails';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -42,6 +43,19 @@ function App() {
               <div className={`route-with-sidebar ${isSidebarOpen ? 'sidebar-open' : ''}`}>
                 <SideBar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
                 <Users />
+              </div>
+            </div>
+          }
+        />
+
+        <Route
+          path="/user-details"
+          element={
+            <div className="dashboard-layout">
+              <Navbar toggleSidebar={toggleSidebar} />
+              <div className={`route-with-sidebar ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+                <SideBar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+                <UserDetails />
               </div>
             </div>
           }
