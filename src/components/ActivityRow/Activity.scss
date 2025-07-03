@@ -12,12 +12,14 @@
         font-size: 24px;
         line-height: 100%;
         letter-spacing: 0;
+        margin-bottom: 5%;
     }
 
     >.BoxContainer{
         display: flex;
         flex-wrap: wrap;
         gap: 24px;
+        justify-content: center;
 
         >.box{
             width: 240px;
@@ -31,6 +33,10 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 5px;
+
+            &:hover{
+                scale: 1.05;
+            }
 
             >.iconBg{
                 border-radius: 50%;
@@ -84,10 +90,11 @@
         width: 100%;
 
         .BoxContainer{
-            gap: 15px;
+            gap: 10px;
+            align-items: center;
 
             .box{
-                width: 230px;
+                max-width: 182px;
             }
         }
     }

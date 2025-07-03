@@ -6,10 +6,11 @@ import { FaRegEye } from 'react-icons/fa';
 import FilterForm from '../../modal/FilterForm/FilterForm';
 import debounce from '../../utils/debounce';
 import { useNavigate } from 'react-router-dom';
-import { useUserData } from '../../hooks/useUserData';
 import { ClipLoader } from 'react-spinners';
+import { UserDataContextType } from '../../types/UserDataTypes';
 
-const UsersData: React.FC = () => {
+
+const UsersData: React.FC<UserDataContextType> = ({ users, loading, error, fetchUsers }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(9);
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
@@ -19,14 +20,6 @@ const UsersData: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const navigate = useNavigate();
-
-
-  // Use the custom hook to access context
-  const { users, loading, error, fetchUsers } = useUserData();
-  
-  useEffect(() => {
-    fetchUsers();
-  },[fetchUsers])
 
 
   // Handle click outside for dropdowns
@@ -43,6 +36,10 @@ const UsersData: React.FC = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   // Debounced search handler
   const handleSearch = debounce((value: string) => {

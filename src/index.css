@@ -17,4 +17,6 @@ code {
   padding: 0;
   /* the mistake have been done so gasto be going */
   box-sizing: border-box;
+  margin: 0;
+  transition: all .2s ease;
 }

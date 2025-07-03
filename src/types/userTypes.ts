@@ -8,6 +8,9 @@ export interface UserDataItem {
   phoneNumber: string;
   dateJoined: string;
   status: 'Active' | 'Inactive' | 'Pending' | 'Blacklisted';
+  accountBalance: string;
+  accountNumber: string;
+  bankName: string;
   profile: {
     bvn: string;
     email: string;

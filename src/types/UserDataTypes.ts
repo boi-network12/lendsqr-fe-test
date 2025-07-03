@@ -6,4 +6,5 @@ export interface UserDataContextType {
   loading: boolean;
   error: string | null;
   fetchUsers: () => Promise<void>;
+  fetchUserById?: (id: string) => Promise<UserDataItem | null>;
 }

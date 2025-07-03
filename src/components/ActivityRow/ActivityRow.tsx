@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import "./Activity.scss"
 import { ActivityItem } from '../../types/ActivityTypes';
 import usersIcon from '../../assets/users.png';
@@ -6,6 +6,9 @@ import favoritesIcon from '../../assets/activeUsers.png';
 import likesIcon from '../../assets/fileDoc.png';
 import sharesIcon from '../../assets/dbIcon.png';
 
+const iconBg = (item: { iconBgColor: string }): CSSProperties => ({
+  background: item.iconBgColor
+});
 
 
 const ActivityRow = () => {
@@ -48,7 +51,7 @@ const ActivityRow = () => {
         <div className='BoxContainer'>
           {activityItems.map((item, index) => (
             <div className="box" key={index}>
-              <div className="iconBg" style={{ background: item.iconBgColor }}>
+              <div className="iconBg" style={iconBg(item)}>
                 <img
                   src={item.icon}
                   alt={item.title}

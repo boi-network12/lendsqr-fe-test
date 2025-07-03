@@ -144,6 +144,7 @@
 @media (max-width: 768px) {
   .NavbarWrapper {
     padding: 0 15px;
+    height: 70px;
     
 
     .hamburger {
@@ -202,8 +203,8 @@
     .second-Div {
       display: flex; /* Default for mobile */
       &.search-open {
-        display: block; /* Change to block when search is open */
-        margin-top: 10px; /* Add spacing to stack below search */
+        display: block; 
+        margin-top: 10px; 
       }
 
       li {
@@ -213,7 +214,7 @@
         }
 
         .bell-icon {
-          width: 20px;
+          width: 18px;
         }
 
         p {
