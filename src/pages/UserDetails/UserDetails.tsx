@@ -16,9 +16,17 @@ const UserDetails: React.FC = () => {
   
   useEffect(() => {
     const loadUser = async () => {
+      // check localstorage first
+      const storedUser = localStorage.getItem(`user_${id}`);
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+        return;
+      }
+
       // If user is provided in state, use it
       if (state?.user) {
         setUser(state.user);
+        localStorage.setItem(`user_${id}`, JSON.stringify(state.user));
         return;
       }
 
@@ -26,6 +34,7 @@ const UserDetails: React.FC = () => {
       const existingUser = users.find((u) => u.id === id);
       if (existingUser) {
         setUser(existingUser);
+        localStorage.setItem(`user_${id}`, JSON.stringify(existingUser));
         return;
       }
 
@@ -34,6 +43,7 @@ const UserDetails: React.FC = () => {
         const fetchedUser = await fetchUserById(id);
         if (fetchedUser) {
           setUser(fetchedUser);
+          localStorage.setItem(`user_${id}`, JSON.stringify(fetchedUser)); 
         }
       }
     };
