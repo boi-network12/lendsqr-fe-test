@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useUserData } from '../../hooks/useUserData';
 import { UserDataItem } from '../../types/userTypes';
-import { ClipLoader } from 'react-spinners';
 import { BiArrowBack } from 'react-icons/bi';
 import ProfileHeader from '../../components/profileHeader/profileHeader';
+import PersonalInformation from '../../components/PersonalInformation/PersonalInformation';
 
 const UserDetails: React.FC = () => {
   const { state } = useLocation();
   const { id } = useParams<{ id: string }>();
-  const { users, loading, error, fetchUserById } = useUserData();
+  const { users, error, fetchUserById } = useUserData();
   const navigate = useNavigate();
   const [user, setUser] = useState<UserDataItem | undefined>(state?.user);
 
@@ -70,20 +70,11 @@ const UserDetails: React.FC = () => {
           </h2>
         </div>
         {/* others */}
-        {
-           loading ? <ClipLoader
-                      color="#333"
-                      loading={loading}
-                      size={30}
-                      aria-label="Loading Spinner"
-                      data-testid="loader"
-                    /> : 
-                     <ProfileHeader user={user}/>
-          }
+        <ProfileHeader user={user}/>
       </div>
 
       <div className="actData">
-        
+        {user && <PersonalInformation user={user} />}
       </div>
         
     </div>

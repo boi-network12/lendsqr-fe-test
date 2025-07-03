@@ -53,14 +53,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
         <ul role="tablist">
           {_NavItems.map((item, index) => (
             <li
-                key={index}
-                role="tab"
-                aria-selected={item.name === activeNav ? "true" : "false"}
-                aria-controls={`panel-${index}`}
-                className={`profileNavLink ${item.name === activeNav ? 'active' : ''}`}
-                onClick={() => handleNavClick(item.name)}
-              >
-                {item.name}
+              key={index}
+              role="tab"
+              aria-selected={item.name === activeNav ? "true" : "false"}
+              className={`profileNavLink ${item.name === activeNav ? 'active' : ''}`}
+              onClick={() => handleNavClick(item.name)}
+            >
+              {item.name}
             </li>
           ))}
         </ul>
